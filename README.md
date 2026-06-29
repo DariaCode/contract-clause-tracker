@@ -19,11 +19,13 @@ and grouping.
 
 ## Screens
 
-- **Dashboard** — document cards with label coverage, or a "by label"
-  expandable table; navbar search and a label filter.
+- **Dashboard** — document cards with label coverage (share of sentences
+  labeled), or a "by label" expandable table; toolbar search and a label filter.
 - **Document labeling** — read the contract in a serif column and apply labels
-  to sentences via an inline command popover (type to search/create a label,
-  `↵` to apply the top match, `1–9` quick-pick, `esc` to close). A right rail
+  to sentences, by mouse or keyboard. Click a sentence — or use `↓`/`↑` to move
+  the cursor — then `1–9` applies a label by its hotkey and `del` removes it;
+  `↵` (or a click) opens an inline command popover to type/search/create a label
+  (`↵` applies the top match, `1–9` quick-pick, `esc` closes). A sticky sidebar
   shows live stats and the labels present.
 - **Add a contract** (the **+ Upload** button) — drag/drop or browse a
   `.txt`/`.md` file, **or paste text** (with live sentence/word counts); the
@@ -32,8 +34,8 @@ and grouping.
   label, create custom labels, edit any label's name / colour / hotkey, and
   delete custom labels (predefined ones are editable but not deletable).
 
-The UI follows a high-fidelity design handoff ("Clausebook"); its tokens live in
-`frontend/src/styles/_tokens.scss`.
+The UI follows a high-fidelity design handoff; its tokens (colour, type scale,
+spacing, radii) live in `frontend/src/styles/_tokens.scss`.
 
 ## Run it
 
@@ -44,8 +46,8 @@ docker compose up --build
 - **App:** http://localhost
 - **API + Swagger docs:** http://localhost:8000/docs
 
-The database schema is created and a starter set of labels is seeded
-automatically on first boot.
+The database schema is created and a starter set of labels **and eight demo
+contracts** are seeded automatically on first boot.
 
 ### Local development (hot-reload)
 
@@ -122,7 +124,9 @@ Base path `/api`. Full interactive docs at `/docs`.
 | `DELETE` | `/annotations/{id}`        | Remove an annotation                               |
 
 On upload the document body is segmented into sentences (with character
-offsets) so it is immediately ready for labeling.
+offsets) so it is immediately ready for labeling. Label hotkeys are unique
+across the catalog — creating or editing a label to a hotkey another label
+already uses returns `409`.
 
 ## Data model
 
@@ -135,8 +139,8 @@ Document 1───* Sentence 1───* Annotation *───1 Label
 - **Sentence** — an ordered slice of a document (`position`, `text`,
   `start_char`, `end_char`). Stored once at upload time so annotations are stable
   references and the dashboard can aggregate without re-parsing.
-- **Label** — the catalog of labels a user can apply (name + colour +
-  `is_custom`).
+- **Label** — the catalog of labels a user can apply (name + colour + optional
+  quick-pick `hotkey` + `is_custom`).
 - **Annotation** — the join that records "this sentence has this label".
   Unique on `(sentence_id, label_id)` so the same label can't be applied to a
   sentence twice.
@@ -188,8 +192,10 @@ backend/
 frontend/
   src/app/
     core/              # API models, services, UI helpers (the data layer)
-    features/          # dashboard, document-editor, upload screens
-    shared/            # header + small directives
+    features/          # dashboard, document-editor, upload, labels screens
+    shared/            # reusable components (navbar, page-header, search-box,
+                       #   document-card, document-sidebar, label-chip, badge,
+                       #   confirm-dialog) + directives
   src/styles/_tokens.scss  # design tokens
   proxy.conf.json      # dev /api proxy
   nginx.conf           # prod /api proxy + SPA fallback
@@ -199,22 +205,40 @@ AGENTS.md              # conventions for agents working in this repo
 
 ## Tests
 
+**Backend** (pytest):
+
 ```bash
-cd backend && pytest
+cd backend
+.venv/bin/pytest              # or: source .venv/bin/activate && pytest
 ```
 
 Covers the critical paths: upload → sentence split, sentence labeling
-(including idempotency), dashboard search / filter / group, deletion, and the
-segmentation rules (offsets, abbreviations, markdown headings).
+(including idempotency), dashboard search / filter / group, deletion,
+label CRUD + unique hotkeys, delete-label cascade, the demo-contract seed, and
+the segmentation rules (offsets, abbreviations, markdown headings).
+
+**Frontend** (Angular's Vitest runner):
+
+```bash
+cd frontend
+npm test -- --no-watch        # single run; omit --no-watch to watch
+```
+
+Covers the data layer (`DocumentService` query/upload/delete), the shared
+components (`SearchBox`, `LabelChip`, `DocumentCard` coverage), the
+confirm-dialog flow, and the labeling editor's keyboard model (`↓`/`↑`
+navigation, `1–9` apply, `del` remove, `↵` opens the popover).
 
 ## Code quality (formatting & linting)
 
 Formatting and linting run automatically on commit via a **Husky pre-commit
 hook** (`lint-staged`, on changed files only):
 
-- **Frontend** — [Prettier](https://prettier.io) for formatting and
+- **Frontend** — [Prettier](https://prettier.io) for formatting,
   [ESLint](https://eslint.org) (`@angular-eslint` + `typescript-eslint`,
-  `eslint-config-prettier` so they don't conflict).
+  `eslint-config-prettier` so they don't conflict), and a minimal
+  [Stylelint](https://stylelint.io) for the one SCSS rule Prettier can't enforce
+  (blank lines between nested rules).
 - **Backend** — [Ruff](https://docs.astral.sh/ruff/), one fast tool that both
   formats and lints Python.
 
@@ -226,6 +250,7 @@ backend/.venv/bin/pip install -r backend/requirements-dev.txt   # ruff
 
 # run manually
 npm run lint --prefix frontend                # eslint
+npm run lint:css --prefix frontend            # stylelint (scss)
 npm run format --prefix frontend              # prettier --write
 cd backend && .venv/bin/ruff check . && .venv/bin/ruff format .
 ```

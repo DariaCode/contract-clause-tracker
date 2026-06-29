@@ -122,7 +122,7 @@ export class Labels implements OnInit {
   remove(label: LabelUsage): void {
     if (!label.is_custom) return;
     const used = label.documents_count
-      ? ` It's applied across ${label.documents_count} document${label.documents_count === 1 ? '' : 's'} — those labels will be removed too.`
+      ? ` It's applied across ${label.documents_count} document${label.documents_count === 1 ? '' : 's'} - those labels will be removed too.`
       : '';
     this.confirm
       .ask({ title: 'Delete label', message: `Delete the "${label.name}" label?${used}` })
