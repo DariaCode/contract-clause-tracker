@@ -19,6 +19,29 @@ def test_health(client):
     assert client.get("/api/health").json() == {"status": "ok"}
 
 
+def test_seed_documents_creates_demo_contracts():
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.pool import StaticPool
+
+    from app import models, seed
+    from app.database import Base
+
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    Session = sessionmaker(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    with Session() as db:
+        seed.seed_documents(db)
+        docs = db.query(models.Document).all()
+        assert len(docs) == 8
+        assert all(len(d.sentences) > 0 for d in docs)
+        # idempotent — a second run on a non-empty DB is a no-op
+        seed.seed_documents(db)
+        assert db.query(models.Document).count() == 8
+
+
 def test_labels_seeded(client):
     labels = client.get("/api/labels").json()
     names = {label["name"] for label in labels}
@@ -99,6 +122,27 @@ def test_label_documents_count(client):
         if label_["id"] == label["id"]
     )
     assert refreshed["documents_count"] == 1
+
+
+def test_delete_label_in_use_cascades_annotations(client):
+    """A custom label can be deleted even when it's applied; its annotations go too."""
+    doc = _upload(client).json()
+    sentence = doc["sentences"][1]
+    label = client.post(
+        "/api/labels", json={"name": "Temp", "color": "#be185d", "hotkey": "t"}
+    ).json()
+    client.post(
+        "/api/annotations",
+        json={"sentence_id": sentence["id"], "label_id": label["id"]},
+    )
+
+    assert client.delete(f"/api/labels/{label['id']}").status_code == 204
+
+    # the label is gone and the sentence no longer carries the annotation
+    assert all(x["id"] != label["id"] for x in client.get("/api/labels").json())
+    refreshed = client.get(f"/api/documents/{doc['id']}").json()
+    target = next(s for s in refreshed["sentences"] if s["id"] == sentence["id"])
+    assert target["annotations"] == []
 
 
 def test_upload_splits_into_sentences(client):

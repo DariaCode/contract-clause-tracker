@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import Base, SessionLocal, engine
 from .routers import annotations, documents, labels
-from .seed import seed_labels
+from .seed import seed_documents, seed_labels
 
 
 @asynccontextmanager
@@ -18,6 +18,7 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
     with SessionLocal() as db:
         seed_labels(db)
+        seed_documents(db)
     yield
 
 

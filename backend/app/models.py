@@ -80,7 +80,11 @@ class Label(Base):
     is_custom: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
-    annotations: Mapped[list["Annotation"]] = relationship(back_populates="label")
+    # Deleting a label removes the annotations that reference it (the FK is
+    # non-nullable, so they can't be orphaned).
+    annotations: Mapped[list["Annotation"]] = relationship(
+        back_populates="label", cascade="all, delete-orphan"
+    )
 
 
 class Annotation(Base):

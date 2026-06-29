@@ -101,7 +101,8 @@ npm start                    # ng serve on http://localhost:4200
 `ng serve` proxies `/api` to `http://localhost:8000` via `proxy.conf.json`, so
 the dev server and the Docker build use the exact same relative API paths.
 
-A sample contract lives at `backend/sample_contracts/services_agreement.md`.
+Eight demo contracts live in `backend/sample_contracts/` and are seeded into an
+empty database on first startup (see `backend/app/seed.py`).
 
 ## API
 
