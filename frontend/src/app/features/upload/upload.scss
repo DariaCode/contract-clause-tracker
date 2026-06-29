@@ -1,0 +1,139 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+// Local layout constants
+$container-max: 1340px;
+$container-pad: 26px;
+$inner-max: 720px;
+$glyph-size: 48px;
+$textarea-height: 260px;
+.upload {
+  padding: $container-pad;
+  max-width: $container-max;
+  margin: 0 auto;
+  &__inner {
+    max-width: $inner-max;
+    margin: 0 auto;
+  }
+  &__error {
+    color: $danger;
+    font-size: $fs-sm;
+    text-align: center;
+    margin: 0 0 14px;
+  }
+
+  // --- compact dropzone ---
+  &__dropzone {
+    @include flex-center;
+    gap: 18px;
+    padding: 24px;
+    border: 1.5px dashed $dropzone-border;
+    border-radius: 14px;
+    background: $dropzone-bg;
+    cursor: pointer;
+    transition:
+      border-color 0.12s,
+      background 0.12s;
+    &.is-dragging {
+      border-color: $brand-orange;
+      background: $orange-tint;
+    }
+  }
+  &__input {
+    display: none;
+  }
+  &__glyph {
+    width: $glyph-size;
+    height: $glyph-size;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: $orange-tint;
+    @include flex-center;
+    justify-content: center;
+    color: $brand-orange;
+    font-size: $fs-xl;
+  }
+  &__dz-text {
+    flex: 1;
+  }
+  &__dz-title {
+    font-size: $fs-md;
+    color: $text;
+    font-weight: $fw-bold;
+  }
+  &__dz-meta {
+    @include mono($fs-xs, $faint);
+    margin-top: 3px;
+  }
+  &__browse {
+    flex-shrink: 0;
+  }
+
+  // --- or divider ---
+  &__divider {
+    @include flex-center;
+    gap: 14px;
+    margin: 18px 0;
+  }
+  &__rule {
+    flex: 1;
+    height: 1px;
+    background: $border;
+  }
+  &__or {
+    @include mono($fs-xs, $faint);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  // --- paste panel ---
+  &__paste {
+    border: 1px solid $border-subtle;
+    border-radius: 16px;
+    background: $white;
+    padding: 18px;
+    box-shadow: $shadow-card;
+  }
+  &__paste-top {
+    @include flex-center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  &__name {
+    flex: 1;
+    height: 40px;
+    padding: 0 13px;
+    border: 1px solid $border-subtle;
+    border-radius: 9px;
+    background: $white;
+    font-family: $font-mono;
+    font-size: $fs-sm;
+    color: $text;
+    outline: none;
+  }
+  &__textarea {
+    width: 100%;
+    height: $textarea-height;
+    resize: vertical;
+    padding: 14px;
+    border: 1px solid $border-subtle;
+    border-radius: 11px;
+    background: $panel-bg;
+    font-family: $font-mono;
+    font-size: $fs-sm;
+    line-height: 1.6;
+    color: $prose;
+    outline: none;
+  }
+  &__paste-foot {
+    @include flex-center;
+    gap: 12px;
+    margin-top: 13px;
+  }
+  &__stats {
+    @include mono($fs-xs, $faint);
+  }
+  &__clear {
+    margin-left: auto;
+  }
+}

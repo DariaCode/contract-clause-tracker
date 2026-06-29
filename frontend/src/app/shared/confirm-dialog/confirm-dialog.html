@@ -1,0 +1,14 @@
+@if (confirm.pending(); as p) {
+  <div class="confirm" (click)="confirm.respond(false)">
+    <div class="confirm__box" (click)="$event.stopPropagation()">
+      <div class="confirm__title">{{ p.title }}</div>
+      <div class="confirm__message">{{ p.message }}</div>
+      <div class="confirm__actions">
+        <button class="btn btn--outline" (click)="confirm.respond(false)">Cancel</button>
+        <button class="btn btn--danger" (click)="confirm.respond(true)">
+          {{ p.confirmLabel || 'Delete' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

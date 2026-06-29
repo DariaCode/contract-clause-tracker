@@ -1,0 +1,2 @@
+# Root tooling (husky + lint-staged). Sub-projects have their own .gitignore.
+node_modules/

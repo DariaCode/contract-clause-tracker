@@ -1,0 +1,89 @@
+// Design tokens — from the Clausebook design handoff.
+// @use this partial from any component stylesheet:  @use '../../../styles/tokens' as *;
+
+// --- Brand / accent (Legartis-derived) ---
+$brand-orange: #f2683c; // logo end / progress / focus ring / dropzone glyph
+$orange-text: #e0531f; // links, active filter chip, CUSTOM badge
+$orange-tint: #fdeee8; // active chip bg, focus row bg, badges
+$logo-gradient: linear-gradient(135deg, #f2863c, #ec5a33);
+
+// --- Neutrals ---
+$white: #ffffff;
+$page-bg: #f1f1f3;
+$panel-bg: #fafafb;
+$surface: $white; // cards / header / popovers
+$prose: #262629; // document body (serif) text
+
+$text: #1a1a1c;
+$muted: #6b6c72;
+$faint: #9a9ba1;
+$chip-text: #45454d;
+
+$border: #ececef; // header / divider
+$border-soft: #f0f0f2;
+$border-card: #ebebee;
+$border-subtle: #e4e4e7;
+$border-row: #f4f4f6;
+$border-hover: #d9d9de; // card hover
+$dashed: #c6c6cb; // dashed placeholder border (popover "create" row)
+$caret: #bdbdc4; // table expand caret
+$disabled: #c7c7cc; // disabled primary button (e.g. empty paste submit)
+$ext-gray: #b4b4ba; // neutral file-extension badge bg
+
+$field-bg: #f4f4f5;
+$segmented-track: #ececef;
+$progress-track: #efeff1;
+
+// --- Status / semantic ---
+$success: #15a35a; // Ready, labeled count
+$warning: #b8860b; // candidate / unlabeled
+$danger: #dc2626; // upload error
+$delete-text: #c2410c; // destructive action (delete label)
+$delete-border: #f3d9cb;
+$delete-bg: #fdf3ee;
+
+// --- Upload dropzone ---
+$dropzone-bg: #faf8f7;
+$dropzone-border: #d8cfca;
+
+// --- Radius ---
+$r-card: 13px;
+$r-popover: 11px;
+$r-button: 10px;
+$r-field: 10px;
+$r-chip: 7px;
+$r-pill: 16px;
+
+// --- Shadow ---
+$shadow-card: 0 1px 2px rgba(20, 20, 30, 0.04);
+$shadow-popover: 0 18px 48px rgba(20, 20, 30, 0.2);
+$overlay: rgba(20, 20, 30, 0.35); // modal scrim
+$shadow-segment: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+// --- Fonts ---
+$font-sans:
+  'Hanken Grotesk',
+  system-ui,
+  -apple-system,
+  sans-serif;
+$font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+$font-serif: 'Spectral', Georgia, serif;
+
+// --- Type scale (font sizes) ---
+// A compact, responsive scale in `rem` on clean 0.125rem (2px) steps — honours
+// the user's browser/zoom preference. Use these tokens, never literal px; the
+// design's many half-pixel sizes are rounded onto the nearest step.
+$fs-2xs: 0.625rem; // 10px — micro badges, eyebrows, mono meta, dates
+$fs-xs: 0.75rem; //   12px — labels, chips, counts, small rows
+$fs-sm: 0.875rem; //  14px — body, popover rows, buttons, nav, table titles
+$fs-md: 1rem; //      16px — card / section titles, document prose, wordmark
+$fs-lg: 1.125rem; //  18px — reader section headings
+$fs-xl: 1.5rem; //    24px — page titles, large glyph
+
+// --- Font weights --- (400 is the inherited default, so no token for it)
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+// Palette for user-created clause types (rotates by creation order).
+$custom-palette: #9333ea, #0d9488, #dc2626, #2563eb, #65a30d, #db2777;

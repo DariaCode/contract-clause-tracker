@@ -1,0 +1,70 @@
+<div class="upload">
+  <app-page-header breadcrumb="Documents" breadcrumbLink="/" title="Add a contract">
+    <span subline>Plain-text or Markdown · split into sentences automatically</span>
+  </app-page-header>
+
+  <div class="upload__inner">
+    @if (error()) {
+      <p class="upload__error">{{ error() }}</p>
+    }
+
+    <!-- compact dropzone -->
+    <label
+      class="upload__dropzone"
+      [class.is-dragging]="dragging()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop($event)"
+    >
+      <input
+        class="upload__input"
+        type="file"
+        accept=".txt,.md,.markdown"
+        (change)="onBrowse($event)"
+      />
+      <span class="upload__glyph">↥</span>
+      <div class="upload__dz-text">
+        <div class="upload__dz-title">Drag &amp; drop a file, or browse</div>
+        <div class="upload__dz-meta">.txt plain text · .md markdown · up to 5 MB</div>
+      </div>
+      <span class="upload__browse btn btn--primary">Browse files</span>
+    </label>
+
+    <!-- or divider -->
+    <div class="upload__divider">
+      <span class="upload__rule"></span>
+      <span class="upload__or">or paste text</span>
+      <span class="upload__rule"></span>
+    </div>
+
+    <!-- paste panel -->
+    <div class="upload__paste">
+      <div class="upload__paste-top">
+        <input
+          class="upload__name"
+          placeholder="Document name (e.g. NDA — Globex)"
+          [ngModel]="pasteName()"
+          (ngModelChange)="pasteName.set($event)"
+        />
+        <app-badge>TXT</app-badge>
+      </div>
+      <textarea
+        class="upload__textarea"
+        placeholder="Paste your contract text here — sentences are detected automatically."
+        [ngModel]="pasteText()"
+        (ngModelChange)="pasteText.set($event)"
+      ></textarea>
+      <div class="upload__paste-foot">
+        <span class="upload__stats">{{ pasteStats() }}</span>
+        <button class="upload__clear btn btn--outline" (click)="clearPaste()">Clear</button>
+        <button
+          class="btn btn--primary"
+          [class.is-disabled]="!canSubmit() || busy()"
+          (click)="submitPaste()"
+        >
+          Add &amp; start labeling →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

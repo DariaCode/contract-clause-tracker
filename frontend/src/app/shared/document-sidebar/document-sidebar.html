@@ -1,0 +1,25 @@
+<aside class="sidebar">
+  <div class="sidebar__eyebrow">This document</div>
+  <div class="sidebar__stats">
+    <div class="sidebar__stat">
+      <span>Sentences</span><span class="sidebar__value">{{ sentenceCount() }}</span>
+    </div>
+    <div class="sidebar__stat">
+      <span>Labeled sentences</span
+      ><span class="sidebar__value sidebar__value--ok">{{ labeledCount() }}</span>
+    </div>
+    <div class="sidebar__stat">
+      <span>Unlabeled candidates</span
+      ><span class="sidebar__value sidebar__value--warn">{{ candidateCount() }}</span>
+    </div>
+  </div>
+
+  <div class="sidebar__eyebrow">Labels in document</div>
+  <div class="sidebar__labels">
+    @for (c of labels(); track c.label.id) {
+      <app-label-chip [color]="c.label.color" [name]="c.label.name" [count]="c.count" />
+    } @empty {
+      <div class="sidebar__empty">No labels yet.</div>
+    }
+  </div>
+</aside>

@@ -1,0 +1,19 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+:host {
+  display: inline-flex;
+}
+.badge {
+  @include mono($fs-2xs);
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: $orange-text;
+  background: $orange-tint;
+  &--grey {
+    color: $white;
+    background: $ext-gray;
+  }
+}

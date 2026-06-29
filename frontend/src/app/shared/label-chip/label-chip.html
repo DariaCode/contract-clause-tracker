@@ -1,0 +1,15 @@
+<span
+  class="chip"
+  [class.chip--color]="tone() === 'color'"
+  [style.color]="tone() === 'color' ? color() : null"
+  [style.background]="tone() === 'color' ? tintColor() : null"
+>
+  <span class="chip__dot" [style.background]="color()"></span>
+  <span class="chip__name">{{ name() }}</span>
+  @if (count() !== null) {
+    <span class="chip__count">{{ count() }}</span>
+  }
+  @if (removable()) {
+    <button class="chip__remove" [style.background]="color()" (click)="onRemove($event)">×</button>
+  }
+</span>

@@ -1,0 +1,39 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+:host {
+  display: inline-flex;
+}
+.chip {
+  @include inline-flex-center;
+  gap: 7px;
+  font-size: $fs-sm;
+  color: $chip-text;
+  background: $field-bg;
+  border-radius: $r-chip;
+  padding: 5px 11px;
+  &--color {
+    font-weight: $fw-semibold;
+    padding: 4px 7px 4px 11px;
+  }
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  &__count {
+    margin-left: auto;
+    @include mono($fs-xs, $faint);
+  }
+  &__remove {
+    margin-left: 2px;
+    width: 17px;
+    height: 17px;
+    border: none;
+    border-radius: 50%;
+    @include inline-flex-center;
+    justify-content: center;
+    color: $white;
+    font-size: $fs-xs;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,44 @@
+// Reusable style fragments. Pair with the tokens:
+//   @use '../../../styles/tokens' as *;
+//   @use '../../../styles/mixins' as *;
+// then `@include flex-center;` etc.
+@use 'tokens' as *;
+
+// The display:flex + align-items:center pair we repeat everywhere.
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin inline-flex-center {
+  display: inline-flex;
+  align-items: center;
+}
+
+// Monospace text (metadata, counts, dates, badges). Optional size + colour.
+@mixin mono($size: null, $color: null) {
+  font-family: $font-mono;
+  @if $size {
+    font-size: $size;
+  }
+  @if $color {
+    color: $color;
+  }
+}
+
+// Mono uppercase "eyebrow" label (section kickers).
+@mixin eyebrow {
+  font-family: $font-mono;
+  font-size: $fs-2xs;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $faint;
+}
+
+// A progress / coverage bar track (pair with a coloured fill at 100% height).
+@mixin bar-track($height: 6px) {
+  height: $height;
+  background: $progress-track;
+  border-radius: 4px;
+  overflow: hidden;
+}

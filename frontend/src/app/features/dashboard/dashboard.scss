@@ -1,0 +1,213 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+// Local layout constants
+$container-max: 1340px;
+$container-pad: 26px;
+$grid-gap: 16px;
+$coverage-width: 120px;
+$menu-width: 240px;
+$table-cols: 34px 1fr 150px 110px 100px;
+$thead-height: 38px;
+$group-height: 50px;
+$child-height: 40px;
+.dashboard {
+  padding: $container-pad;
+  max-width: $container-max;
+  margin: 0 auto;
+
+  // --- toolbar ---
+  &__toolbar {
+    @include flex-center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  &__segmented {
+    display: flex;
+    background: $segmented-track;
+    border-radius: $r-button;
+    padding: 3px;
+  }
+  &__seg {
+    font-size: $fs-xs;
+    font-weight: $fw-semibold;
+    padding: 7px 13px;
+    border-radius: $r-chip;
+    cursor: pointer;
+    color: $muted;
+    &.is-active {
+      background: $white;
+      color: $text;
+      box-shadow: $shadow-segment;
+    }
+  }
+  &__divider {
+    width: 1px;
+    height: 24px;
+    background: $border-subtle;
+    margin: 0 4px;
+  }
+  &__filters {
+    @include flex-center;
+    gap: 7px;
+  }
+  &__add {
+    position: relative;
+  }
+  &__add-btn {
+    @include mono($fs-xs, $warning);
+    border: 1px solid $border-subtle;
+    border-radius: $r-pill;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  &__add-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    z-index: 20;
+    width: $menu-width;
+    background: $white;
+    border: 1px solid $border-subtle;
+    border-radius: $r-popover;
+    box-shadow: $shadow-popover;
+    padding: 5px;
+    max-height: 280px;
+    overflow: auto;
+  }
+  &__add-item {
+    @include flex-center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: $r-chip;
+    font-size: $fs-sm;
+    cursor: pointer;
+    &:hover {
+      background: $orange-tint;
+    }
+  }
+  &__search {
+    margin-left: auto;
+  }
+  &__results {
+    @include mono($fs-xs, $faint);
+  }
+  &__empty {
+    padding: 40px 0;
+    text-align: center;
+    color: $muted;
+    font-size: $fs-sm;
+    a {
+      color: $orange-text;
+      cursor: pointer;
+      font-weight: $fw-semibold;
+    }
+  }
+
+  // --- by document grid ---
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $grid-gap;
+  }
+
+  // --- by label table ---
+  &__table {
+    border: 1px solid $border-card;
+    border-radius: $r-card;
+    overflow: hidden;
+    background: $white;
+  }
+  &__thead,
+  &__group,
+  &__child {
+    display: grid;
+    grid-template-columns: $table-cols;
+    padding: 0 18px;
+    align-items: center;
+  }
+  &__thead {
+    height: $thead-height;
+    border-bottom: 1px solid $border-soft;
+    @include mono($fs-2xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $faint;
+    background: $panel-bg;
+  }
+  &__th--right {
+    text-align: right;
+  }
+  &__group {
+    height: $group-height;
+    border-bottom: 1px solid $border-row;
+    cursor: pointer;
+    background: $white;
+    &.is-open {
+      background: $panel-bg;
+    }
+  }
+  &__caret {
+    color: $caret;
+    font-size: $fs-2xs;
+  }
+  &__group-name {
+    @include flex-center;
+    gap: 10px;
+  }
+  &__square {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+  }
+  &__group-title {
+    font-weight: $fw-semibold;
+    font-size: $fs-sm;
+  }
+  &__coverage {
+    @include flex-center;
+  }
+  &__coverage-track {
+    @include bar-track;
+    width: $coverage-width;
+  }
+  &__coverage-fill {
+    height: 100%;
+  }
+  &__group-count {
+    text-align: right;
+    @include mono($fs-sm, $chip-text);
+  }
+  &__group-last {
+    text-align: right;
+    @include mono($fs-xs, $faint);
+  }
+  &__children {
+    background: $panel-bg;
+    border-bottom: 1px solid $border-row;
+  }
+  &__child {
+    height: $child-height;
+    border-top: 1px solid $page-bg;
+    cursor: pointer;
+  }
+  &__child--empty {
+    display: block;
+    padding: 0 18px 0 71px;
+    line-height: $child-height;
+    font-size: $fs-xs;
+    color: $faint;
+  }
+  &__child-name {
+    @include flex-center;
+    gap: 9px;
+    padding-left: 19px;
+  }
+  &__child-text {
+    font-size: $fs-xs;
+    color: $chip-text;
+  }
+  &__child-snippet {
+    @include mono($fs-xs, $faint);
+  }
+}

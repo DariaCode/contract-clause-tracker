@@ -1,0 +1,36 @@
+@use '../../../styles/tokens' as *;
+.confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+  background: $overlay;
+  &__box {
+    width: 100%;
+    max-width: 380px;
+    background: $surface;
+    border-radius: $r-popover;
+    box-shadow: $shadow-popover;
+    padding: 22px;
+  }
+  &__title {
+    font-size: $fs-md;
+    font-weight: $fw-bold;
+    color: $text;
+    margin-bottom: 8px;
+  }
+  &__message {
+    font-size: $fs-sm;
+    color: $muted;
+    line-height: 1.5;
+  }
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
+}

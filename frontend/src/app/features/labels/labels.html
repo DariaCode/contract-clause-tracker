@@ -1,0 +1,102 @@
+<div class="labels">
+  <app-page-header title="Labels">
+    <span subline>{{ labelCount() }} labels · used across {{ docCount() }} contracts</span>
+    <app-search-box
+      actions
+      placeholder="Search labels"
+      [value]="search()"
+      (valueChange)="search.set($event)"
+    />
+    <button actions class="btn btn--primary" (click)="startCreate()">+ New label</button>
+  </app-page-header>
+
+  @if (error()) {
+    <p class="labels__error">{{ error() }}</p>
+  }
+
+  <div class="labels__table">
+    <div class="labels__thead">
+      <span>Label</span>
+      <span class="labels__th--center">Hotkey</span>
+      <span class="labels__th--center">Documents</span>
+      <span></span>
+    </div>
+
+    <!-- create editor -->
+    @if (isCreating) {
+      <ng-container [ngTemplateOutlet]="editor" />
+    }
+
+    @for (label of filteredLabels(); track label.id) {
+      @if (isEditing(label.id)) {
+        <ng-container [ngTemplateOutlet]="editor" />
+      } @else {
+        <div class="labels__row">
+          <div class="labels__identity">
+            <span class="labels__swatch-dot" [style.background]="label.color"></span>
+            <span class="labels__name">{{ label.name }}</span>
+            @if (label.is_custom) {
+              <app-badge>CUSTOM</app-badge>
+            }
+          </div>
+          <span class="labels__hotkey">{{ label.hotkey || '—' }}</span>
+          <span class="labels__docs">{{ label.documents_count }}</span>
+          <div class="labels__actions">
+            <button class="labels__edit" (click)="startEdit(label)">Edit</button>
+            <span class="labels__delete-slot">
+              @if (label.is_custom) {
+                <button class="icon-x" title="Delete label" (click)="remove(label)">✕</button>
+              }
+            </span>
+          </div>
+        </div>
+      }
+    } @empty {
+      <div class="labels__no-match">No labels match “{{ search() }}”.</div>
+    }
+  </div>
+</div>
+
+<!-- shared create / edit editor -->
+<ng-template #editor>
+  <div class="labels__editor">
+    <div class="labels__field">
+      <span class="labels__field-label">Name</span>
+      <input
+        class="labels__input"
+        appAutofocus
+        placeholder="Label name"
+        [ngModel]="editName()"
+        (ngModelChange)="editName.set($event)"
+        (keyup.enter)="save()"
+      />
+    </div>
+    <div class="labels__field">
+      <span class="labels__field-label">Hotkey</span>
+      <input
+        class="labels__input labels__input--hotkey"
+        maxlength="1"
+        placeholder="—"
+        [ngModel]="editHotkey()"
+        (ngModelChange)="onHotkey($event)"
+      />
+    </div>
+    <div class="labels__field">
+      <span class="labels__field-label">Color</span>
+      <div class="labels__swatches">
+        @for (hex of palette; track hex) {
+          <span
+            class="labels__swatch"
+            [class.is-selected]="editColor() === hex"
+            [style.background]="hex"
+            (click)="pickColor(hex)"
+          ></span>
+        }
+      </div>
+    </div>
+    <div class="labels__editor-actions">
+      <button class="btn btn--outline" (click)="cancel()">Cancel</button>
+      <button class="btn btn--primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</ng-template>

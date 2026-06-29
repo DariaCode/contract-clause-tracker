@@ -1,0 +1,13 @@
+<div class="search-box">
+  <span class="search-box__icon">⌕</span>
+  <input
+    class="search-box__input"
+    type="text"
+    [placeholder]="placeholder()"
+    [ngModel]="value()"
+    (ngModelChange)="valueChange.emit($event)"
+  />
+  @if (value()) {
+    <button class="icon-x" title="Clear search" (click)="valueChange.emit('')">✕</button>
+  }
+</div>

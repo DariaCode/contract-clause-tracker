@@ -1,0 +1,14 @@
+<header class="page-header">
+  <div class="page-header__main">
+    @if (breadcrumb()) {
+      <a class="page-header__crumb" [routerLink]="breadcrumbLink()">{{ breadcrumb() }} /</a>
+    }
+    <h1 class="page-header__title">{{ title() }}</h1>
+    <div class="page-header__subline">
+      <ng-content select="[subline]" />
+    </div>
+  </div>
+  <div class="page-header__actions">
+    <ng-content select="[actions]" />
+  </div>
+</header>

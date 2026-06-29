@@ -1,0 +1,203 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+// Local layout constants
+$reader-pad: 34px 44px;
+$reader-max: 680px;
+$popover-width: 360px;
+$pop-list-max: 248px;
+.editor {
+  &__notfound {
+    padding: 40px 26px;
+    color: $muted;
+    a {
+      color: $orange-text;
+      cursor: pointer;
+    }
+  }
+
+  // --- shared page header ---
+  &__topbar {
+    padding: 22px 26px 0;
+  }
+
+  // --- body layout ---
+  &__body {
+    display: flex;
+    min-height: calc(100vh - 174px);
+  }
+  &__reader {
+    flex: 1;
+    padding: $reader-pad;
+    background: $panel-bg;
+  }
+  &__reader-inner {
+    max-width: $reader-max;
+    margin: 0 auto;
+  }
+  &__helper {
+    @include mono($fs-sm, $warning);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  // --- prose / sentences ---
+  &__prose {
+    font-family: $font-serif;
+    font-size: $fs-md;
+    line-height: 1.6;
+    color: $prose;
+  }
+  &__heading {
+    font-weight: $fw-semibold;
+    font-size: $fs-lg;
+    margin: 22px 0 6px;
+    color: $text;
+  }
+  &__sentence {
+    position: relative;
+    margin: 2px -12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    &.is-active {
+      background: $orange-tint; // keyboard cursor (arrow nav)
+      box-shadow: inset 0 0 0 1px $brand-orange;
+    }
+    &.is-focused {
+      background: $orange-tint;
+      box-shadow: inset 0 0 0 2px $brand-orange;
+    }
+  }
+  &__leftbar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 3px;
+  }
+  &__sentence-text {
+    border-radius: 2px;
+  }
+  &__sentence app-label-chip {
+    margin-top: 8px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  &__add-hint {
+    margin-left: 8px;
+    @include mono($fs-xs, $warning);
+    opacity: 0; // revealed on sentence hover
+    transition: opacity 0.12s;
+  }
+  &__sentence:hover &__add-hint,
+  &__sentence.is-active &__add-hint {
+    opacity: 1;
+  }
+
+  // --- command popover ---
+  &__popover {
+    margin: 10px 0 4px;
+    width: $popover-width;
+    background: $white;
+    border: 1px solid $border-subtle;
+    border-radius: $r-popover;
+    box-shadow: $shadow-popover;
+    overflow: hidden;
+    font-family: $font-sans;
+    cursor: default;
+  }
+  &__pop-search {
+    @include flex-center;
+    gap: 9px;
+    padding: 11px 13px;
+    border-bottom: 1px solid $border-soft;
+    color: $faint;
+    font-size: $fs-sm;
+  }
+  &__mag {
+    font-size: $fs-xl;
+    line-height: 1;
+    color: $faint;
+  }
+  &__search-input {
+    flex: 1;
+    outline: none;
+    border: none;
+    background: transparent;
+    @include mono($fs-xs, $text);
+  }
+  &__kbd {
+    @include mono($fs-2xs, $faint);
+    border: 1px solid $border-subtle;
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  &__pop-list {
+    padding: 5px;
+    max-height: $pop-list-max;
+    overflow: auto;
+  }
+  &__pop-item {
+    @include flex-center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: $r-chip;
+    cursor: pointer;
+    &.is-top {
+      background: $orange-tint;
+      .editor__pop-name {
+        font-weight: $fw-semibold;
+      }
+    }
+    &:hover {
+      background: $orange-tint;
+    }
+  }
+  &__square {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+  }
+  &__pop-name {
+    font-size: $fs-sm;
+    color: $text;
+    font-weight: $fw-medium;
+  }
+  &__hotkey {
+    margin-left: auto;
+  }
+  &__pop-create {
+    @include flex-center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: $r-chip;
+    border-top: 1px solid $border-soft;
+    margin-top: 3px;
+    cursor: pointer;
+    @include mono($fs-sm, $warning);
+    &:hover {
+      background: $panel-bg;
+    }
+  }
+  &__pop-plus {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px dashed $dashed;
+    @include flex-center;
+    justify-content: center;
+    color: $faint;
+    font-size: $fs-xs;
+  }
+  &__pop-foot {
+    @include flex-center;
+    gap: 14px;
+    padding: 8px 13px;
+    border-top: 1px solid $border-soft;
+    background: $panel-bg;
+    @include mono($fs-2xs, $faint);
+  }
+}

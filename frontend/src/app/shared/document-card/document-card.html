@@ -1,0 +1,23 @@
+<div class="doc-card" (click)="open.emit()">
+  <div class="doc-card__top">
+    <app-badge>{{ ext(doc()) }}</app-badge>
+    <button class="doc-card__delete icon-x" title="Delete document" (click)="onRemove($event)">
+      ✕
+    </button>
+  </div>
+
+  <div class="doc-card__title">{{ doc().title }}</div>
+  <div class="doc-card__meta">
+    {{ doc().sentence_count }} sentences · {{ doc().labels.length }} labels
+  </div>
+
+  <div class="doc-card__bar">
+    <div class="doc-card__bar-fill" [style.width.%]="coveragePct()"></div>
+  </div>
+
+  <div class="doc-card__tags">
+    @for (t of doc().labels.slice(0, 3); track t.id) {
+      <app-label-chip [color]="t.color" [name]="t.name" />
+    }
+  </div>
+</div>

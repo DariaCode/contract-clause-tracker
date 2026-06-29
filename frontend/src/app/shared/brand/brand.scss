@@ -1,0 +1,26 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+$logo-size: 28px;
+.brand {
+  @include flex-center;
+  gap: 10px;
+  text-decoration: none;
+  color: $text;
+  &__logo {
+    width: $logo-size;
+    height: $logo-size;
+    border-radius: 8px;
+    background: $logo-gradient;
+    @include flex-center;
+    justify-content: center;
+    color: $white;
+    font-weight: $fw-bold;
+    font-size: $fs-md;
+  }
+  &__wordmark {
+    font-weight: $fw-bold;
+    font-size: $fs-md;
+    letter-spacing: -0.01em;
+  }
+}

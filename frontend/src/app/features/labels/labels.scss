@@ -1,0 +1,161 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+// Local layout constants
+$container-max: 1340px;
+$container-pad: 26px;
+$cols: 1fr 96px 130px 130px;
+$thead-height: 38px;
+$row-height: 56px;
+$swatch-size: 26px;
+.labels {
+  padding: $container-pad;
+  max-width: $container-max;
+  margin: 0 auto;
+  &__no-match {
+    padding: 28px 18px;
+    text-align: center;
+    color: $muted;
+    font-size: $fs-sm;
+  }
+  &__error {
+    color: $danger;
+    font-size: $fs-sm;
+    margin: 0 0 12px;
+  }
+  &__table {
+    border: 1px solid $border-card;
+    border-radius: $r-card;
+    overflow: hidden;
+    background: $white;
+  }
+  &__thead {
+    display: grid;
+    grid-template-columns: $cols;
+    padding: 0 18px;
+    height: $thead-height;
+    align-items: center;
+    border-bottom: 1px solid $border-soft;
+    @include mono($fs-2xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $faint;
+    background: $panel-bg;
+  }
+  &__th--center {
+    text-align: center;
+  }
+  &__th--right {
+    text-align: right;
+  }
+
+  // --- row ---
+  &__row {
+    display: grid;
+    grid-template-columns: $cols;
+    padding: 0 18px;
+    height: $row-height;
+    align-items: center;
+    border-bottom: 1px solid $border-row;
+  }
+  &__identity {
+    @include flex-center;
+    gap: 11px;
+  }
+  &__swatch-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 4px;
+  }
+  &__name {
+    font-size: $fs-sm;
+    font-weight: $fw-semibold;
+  }
+  &__hotkey {
+    text-align: center;
+    @include mono($fs-sm, $chip-text);
+  }
+  &__docs {
+    text-align: center;
+    @include mono($fs-sm, $chip-text);
+  }
+  &__actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  &__edit {
+    font-size: $fs-xs;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: $chip-text;
+    border: 1px solid $border-subtle;
+    background: $white;
+  }
+  &__delete-slot {
+    width: 26px;
+    display: flex;
+    justify-content: center;
+  }
+
+  // --- editor (create + inline edit) ---
+  &__editor {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 18px;
+    border-bottom: 1px solid $border-soft;
+    background: $panel-bg;
+  }
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  &__field-label {
+    @include mono($fs-2xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: $faint;
+  }
+  &__input {
+    width: 320px;
+    height: 38px;
+    padding: 0 13px;
+    border: 1px solid $border-subtle;
+    border-radius: 9px;
+    background: $white;
+    font-family: $font-sans;
+    font-size: $fs-sm;
+    color: $text;
+    outline: none;
+    &--hotkey {
+      width: 56px;
+      text-align: center;
+      font-family: $font-mono;
+      font-size: $fs-md;
+    }
+  }
+  &__swatches {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  &__swatch {
+    width: $swatch-size;
+    height: $swatch-size;
+    border-radius: 7px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    &.is-selected {
+      box-shadow: 0 0 0 2px $text;
+    }
+  }
+  &__editor-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+  }
+}

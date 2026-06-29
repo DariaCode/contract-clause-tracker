@@ -1,0 +1,54 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+$sidebar-width: 280px;
+$sticky-top: 60px;
+:host {
+  display: block;
+  width: $sidebar-width;
+  border-left: 1px solid $border;
+  background: $white;
+}
+.sidebar {
+  position: sticky;
+  top: $sticky-top;
+  padding: 24px 20px;
+  &__eyebrow {
+    @include eyebrow;
+    margin-bottom: 14px;
+  }
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin-bottom: 36px;
+  }
+  &__stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: $fs-sm;
+    span:first-child {
+      color: $muted;
+    }
+  }
+  &__value {
+    @include mono;
+    &--ok {
+      color: $success;
+    }
+    &--warn {
+      color: $warning;
+    }
+  }
+  &__labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  &__empty {
+    font-size: $fs-xs;
+    color: $faint;
+    padding: 7px 9px;
+  }
+}

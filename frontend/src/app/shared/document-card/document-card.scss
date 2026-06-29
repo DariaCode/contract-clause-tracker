@@ -1,0 +1,60 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+:host {
+  display: block;
+}
+
+$card-pad: 17px;
+$tags-min-height: 62px;
+.doc-card {
+  height: 100%;
+  border: 1px solid $border-card;
+  border-radius: $r-card;
+  padding: $card-pad;
+  background: $white;
+  cursor: pointer;
+  box-shadow: $shadow-card;
+  transition: border-color 0.12s;
+  &:hover {
+    border-color: $border-hover;
+  }
+  &:hover &__delete {
+    opacity: 1;
+  }
+  &__top {
+    @include flex-center;
+    gap: 8px;
+  }
+  &__delete {
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  &__title {
+    font-size: $fs-md;
+    font-weight: $fw-semibold;
+    margin: 11px 0 4px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  &__meta {
+    @include mono($fs-2xs, $muted);
+    margin-bottom: 12px;
+  }
+  &__bar {
+    @include bar-track;
+    margin-bottom: 12px;
+  }
+  &__bar-fill {
+    height: 100%;
+    background: $brand-orange;
+    border-radius: 4px;
+  }
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 5px;
+    min-height: $tags-min-height;
+  }
+}

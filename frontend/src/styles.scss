@@ -1,0 +1,60 @@
+@use 'styles/tokens' as *;
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  background: $page-bg;
+  color: $text;
+  font-family: $font-sans;
+}
+::placeholder {
+  color: $faint;
+}
+
+/* Shared button — `.btn` + a `--primary` / `--outline` variant. Global so every
+   screen uses the same control. */
+.btn {
+  font-family: $font-sans;
+  font-size: $fs-sm;
+  font-weight: $fw-semibold;
+  border: none;
+  border-radius: $r-button;
+  padding: 9px 16px;
+  cursor: pointer;
+  &--primary {
+    color: $white;
+    background: $text;
+  }
+  &--outline {
+    color: $chip-text;
+    background: $surface;
+    border: 1px solid $border-subtle;
+  }
+  &--danger {
+    color: $delete-text;
+    background: $delete-bg;
+    border: 1px solid $delete-border;
+  }
+  &.is-disabled {
+    background: $disabled;
+    cursor: default;
+  }
+}
+
+/* Small ✕ icon button (clear / delete affordances). */
+.icon-x {
+  border: none;
+  background: none;
+  color: $faint;
+  cursor: pointer;
+  font-size: $fs-sm;
+  line-height: 1;
+  padding: 2px 6px;
+  &:hover {
+    color: $delete-text;
+  }
+}

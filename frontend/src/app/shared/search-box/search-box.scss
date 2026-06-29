@@ -1,0 +1,26 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+.search-box {
+  @include flex-center;
+  gap: 9px;
+  width: 280px;
+  height: 36px;
+  padding: 0 12px;
+  background: $white;
+  border: 1px solid $border-subtle;
+  border-radius: $r-field;
+  color: $faint;
+  &__icon {
+    font-size: $fs-xl;
+    line-height: 1;
+    color: $faint;
+  }
+  &__input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    outline: none;
+    @include mono($fs-xs, $text);
+  }
+}

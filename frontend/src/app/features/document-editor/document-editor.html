@@ -1,0 +1,122 @@
+@if (error()) {
+  <div class="editor__notfound">
+    <p>{{ error() }}</p>
+    <a (click)="goDashboard()">← Back to dashboard</a>
+  </div>
+}
+
+@if (document(); as doc) {
+  <div class="editor__topbar">
+    <app-page-header breadcrumb="Documents" breadcrumbLink="/" [title]="docName()">
+      <span subline>
+        {{ labeledCount() }} of {{ sentenceCount() }} sentences labeled · {{ progressPct() }}%
+      </span>
+      <button actions class="btn btn--danger" (click)="deleteDocument()">Delete</button>
+    </app-page-header>
+  </div>
+
+  <div class="editor__body">
+    <!-- reader -->
+    <div class="editor__reader">
+      <div class="editor__reader-inner">
+        <div class="editor__helper">
+          <div>Click any sentence to apply a label · ↓ ↑ to navigate</div>
+          <div>1–9 to label · del to remove</div>
+        </div>
+
+        <div class="editor__prose">
+          @for (row of rows(); track row.sentence.id) {
+            @if (row.isHeading) {
+              <div class="editor__heading">{{ row.text }}</div>
+            } @else {
+              <div
+                class="editor__sentence"
+                [attr.data-sid]="row.sentence.id"
+                [class.is-focused]="popoverSid() === row.sentence.id"
+                [class.is-active]="focusedSid() === row.sentence.id && popoverSid() === null"
+                (click)="selectSentence(row)"
+              >
+                @if (row.annotation) {
+                  <div
+                    class="editor__leftbar"
+                    [style.background]="row.annotation.label.color"
+                  ></div>
+                }
+                <span
+                  class="editor__sentence-text"
+                  [style.background]="
+                    row.annotation ? tint(row.annotation.label.color) : 'transparent'
+                  "
+                  >{{ row.text }}</span
+                >
+
+                @if (row.annotation) {
+                  <app-label-chip
+                    tone="color"
+                    [removable]="true"
+                    [color]="row.annotation.label.color"
+                    [name]="row.annotation.label.name"
+                    (remove)="removeAnnotation(row.annotation.id)"
+                  />
+                } @else {
+                  <span class="editor__add-hint">+ add label</span>
+                }
+              </div>
+
+              <!-- command popover — rendered outside the focused sentence -->
+              @if (popoverSid() === row.sentence.id) {
+                <div class="editor__popover" (click)="$event.stopPropagation()">
+                  <div class="editor__pop-search">
+                    <span class="editor__mag">⌕</span>
+                    <input
+                      appAutofocus
+                      class="editor__search-input"
+                      placeholder="Search or create a label…"
+                      [ngModel]="query()"
+                      (ngModelChange)="query.set($event)"
+                    />
+                    <span class="editor__kbd">esc</span>
+                  </div>
+                  <div class="editor__pop-list">
+                    @for (c of filtered(); track c.label.id; let i = $index) {
+                      <div
+                        class="editor__pop-item"
+                        [class.is-top]="i === 0"
+                        (click)="applyLabel(row.sentence.id, c.label.id)"
+                      >
+                        <span class="editor__square" [style.background]="c.label.color"></span>
+                        <span class="editor__pop-name">{{ c.label.name }}</span>
+                        @if (c.hk) {
+                          <span class="editor__kbd editor__hotkey">{{ c.hk }}</span>
+                        }
+                      </div>
+                    }
+                    @if (showCreate()) {
+                      <div class="editor__pop-create" (click)="createLabel()">
+                        <span class="editor__pop-plus">+</span>
+                        <span>Create “{{ query() }}”</span>
+                      </div>
+                    }
+                  </div>
+                  <div class="editor__pop-foot">
+                    <span>↵ apply first</span>
+                    <span>1–9 quick-pick</span>
+                    <span>esc close</span>
+                  </div>
+                </div>
+              }
+            }
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- sidebar -->
+    <app-document-sidebar
+      [sentenceCount]="sentenceCount()"
+      [labeledCount]="labeledCount()"
+      [candidateCount]="candidateCount()"
+      [labels]="docLabels()"
+    />
+  </div>
+}

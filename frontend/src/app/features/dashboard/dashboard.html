@@ -1,0 +1,139 @@
+<div class="dashboard">
+  <app-page-header title="Documents">
+    <span subline>
+      {{ docCount() }} contracts · {{ totalAnnotations() }} labeled sentences ·
+      {{ labelCount() }} labels
+    </span>
+    <button actions class="btn btn--primary" (click)="goUpload()">+ Upload</button>
+  </app-page-header>
+
+  <!-- toolbar -->
+  <div class="dashboard__toolbar">
+    <div class="dashboard__segmented">
+      <span
+        class="dashboard__seg"
+        [class.is-active]="groupMode() === 'document'"
+        (click)="setGroupMode('document')"
+        >By document</span
+      >
+      <span
+        class="dashboard__seg"
+        [class.is-active]="groupMode() === 'label'"
+        (click)="setGroupMode('label')"
+        >By label</span
+      >
+    </div>
+
+    <div class="dashboard__divider"></div>
+
+    <div class="dashboard__filters">
+      @if (labelFilter(); as f) {
+        <app-label-chip
+          tone="color"
+          [removable]="true"
+          [color]="f.color"
+          [name]="f.name"
+          (remove)="clearFilter()"
+        />
+      }
+      <div class="dashboard__add">
+        <span class="dashboard__add-btn" (click)="filterMenuOpen.set(!filterMenuOpen())">
+          + Add filter
+        </span>
+        @if (filterMenuOpen()) {
+          <div class="dashboard__add-menu">
+            @for (t of labels(); track t.id) {
+              <div class="dashboard__add-item" (click)="applyFilter(t)">
+                <span class="dashboard__square" [style.background]="t.color"></span>{{ t.name }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <app-search-box
+      class="dashboard__search"
+      placeholder="Search documents &amp; labels"
+      [value]="searchService.query()"
+      (valueChange)="searchService.query.set($event)"
+    />
+    <span class="dashboard__results">{{ docCount() }} results</span>
+  </div>
+
+  @if (docCount() === 0 && !loading()) {
+    <div class="dashboard__empty">
+      No documents yet. <a (click)="goUpload()">Upload a contract</a> to begin.
+    </div>
+  }
+
+  <!-- BY DOCUMENT : card grid -->
+  @if (groupMode() === 'document') {
+    <div class="dashboard__grid">
+      @for (d of summaries(); track d.id) {
+        <app-document-card [doc]="d" (open)="openDoc(d.id)" (remove)="deleteDoc(d.id, d.title)" />
+      }
+    </div>
+  }
+
+  <!-- BY LABEL : grouped table -->
+  @if (groupMode() === 'label') {
+    <div class="dashboard__table">
+      <div class="dashboard__thead">
+        <span class="dashboard__th"></span>
+        <span class="dashboard__th">Label</span>
+        <span class="dashboard__th">Coverage</span>
+        <span class="dashboard__th dashboard__th--right">Documents</span>
+        <span class="dashboard__th dashboard__th--right">Last seen</span>
+      </div>
+
+      @for (g of groups(); track g.label.id) {
+        <div
+          class="dashboard__group"
+          [class.is-open]="isOpen(g.label.id)"
+          (click)="toggleGroup(g.label.id)"
+        >
+          <span class="dashboard__caret">{{ isOpen(g.label.id) ? '▾' : '▸' }}</span>
+          <div class="dashboard__group-name">
+            <span class="dashboard__square" [style.background]="g.label.color"></span>
+            <span class="dashboard__group-title">{{ g.label.name }}</span>
+            @if (g.label.is_custom) {
+              <app-badge>CUSTOM</app-badge>
+            }
+          </div>
+          <div class="dashboard__coverage">
+            <div class="dashboard__coverage-track">
+              <div
+                class="dashboard__coverage-fill"
+                [style.width.%]="g.pct"
+                [style.background]="g.label.color"
+              ></div>
+            </div>
+          </div>
+          <span class="dashboard__group-count">{{ g.count }}</span>
+          <span class="dashboard__group-last">{{ g.last }}</span>
+        </div>
+
+        @if (isOpen(g.label.id)) {
+          <div class="dashboard__children">
+            @for (doc of g.docs; track doc.id) {
+              <div class="dashboard__child" (click)="openDoc(doc.id)">
+                <span></span>
+                <div class="dashboard__child-name">
+                  <app-badge variant="grey">{{ ext(doc) }}</app-badge>
+                  <span class="dashboard__child-text">{{ doc.title }}</span>
+                </div>
+                <span class="dashboard__child-snippet">{{ doc.sentence_count }} sentences</span>
+                <span></span><span></span>
+              </div>
+            } @empty {
+              <div class="dashboard__child dashboard__child--empty">
+                No documents with this label yet.
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  }
+</div>

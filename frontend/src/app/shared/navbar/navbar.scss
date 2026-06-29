@@ -1,0 +1,31 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+$navbar-height: 60px;
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: $navbar-height;
+  @include flex-center;
+  gap: 16px;
+  padding: 0 26px;
+  background: $surface;
+  border-bottom: 1px solid $border;
+  &__nav {
+    margin-left: auto;
+    @include flex-center;
+    gap: 18px;
+    font-size: $fs-sm;
+    color: $muted;
+  }
+  &__nav-link {
+    text-decoration: none;
+    color: $muted;
+    font-weight: $fw-semibold;
+    cursor: pointer;
+    &.is-active {
+      color: $text;
+    }
+  }
+}

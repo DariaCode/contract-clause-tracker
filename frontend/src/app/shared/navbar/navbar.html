@@ -1,0 +1,15 @@
+<header class="navbar">
+  <app-brand />
+
+  <nav class="navbar__nav">
+    <a
+      routerLink="/"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="navbar__nav-link"
+    >
+      Documents
+    </a>
+    <a routerLink="/labels" routerLinkActive="is-active" class="navbar__nav-link">Labels</a>
+  </nav>
+</header>

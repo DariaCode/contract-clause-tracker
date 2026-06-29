@@ -1,0 +1,29 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, UP: pyupgrade,
+# B: bugbear, C4: comprehensions, SIM: simplify.
+select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency-injection helpers are *meant* to be called in argument
+# defaults — that's the framework idiom, not the B008 anti-pattern.
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.Query",
+    "fastapi.File",
+    "fastapi.Form",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Pytest fixtures and star-imports patterns aren't a concern in tests.
+"tests/*" = ["B"]
+
+[tool.ruff.format]
+quote-style = "double"
